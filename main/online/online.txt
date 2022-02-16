@@ -1,0 +1,3 @@
+NAME:Oleg
+CITY:Kiev
+AGE:19
