@@ -1,3 +1,0 @@
-NAME:Maks
-AGE:22
-CITY:Lviv
