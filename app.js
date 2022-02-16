@@ -1,13 +1,13 @@
-const path = require('path')
-const fs = require('fs')
+const path = require('path');
+const fs = require('fs');
 
 const onlineUsers = [
     {name: "Maks", age: 22, city: "Lviv"},
-]
+];
 
 const inPersonUsers = [
     {name: "Oleg", age: 19, city: "Kiev"},
-]
+];
 
 
 function append(dirMain, dirName, fileName, data) {
