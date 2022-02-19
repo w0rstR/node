@@ -9,22 +9,22 @@
     <title>Users</title>
 </head>
 <body>
-    <div class="container">
-            {{#each users}}
-                <div class="item">
-                    <div>
-                        <div>First Name: {{this.firstname}}</div>
-                        <div>Last Name: {{this.lastname}}</div>
-                        <div>Email: {{this.email}}</div>
-                        <div>Password: {{this.password}}</div>
-                        <div>Age: {{this.age}}</div>
-                        <div>City: {{this.city}}</div>
-                    </div>
-                    <div>
-                        <button class="btn"><a href="/user/{{this.id}}">Show details</a></button>
-                    </div>
-                </div>
-            {{/each}}
-    </div>
+<div class="container">
+    {{#each users}}
+        <div class="item">
+            <div>
+                <div>First Name: {{this.firstname}}</div>
+                <div>Last Name: {{this.lastname}}</div>
+                <div>Email: {{this.email}}</div>
+                <div>Password: {{this.password}}</div>
+                <div>Age: {{this.age}}</div>
+                <div>City: {{this.city}}</div>
+            </div>
+            <div>
+                <button class="btn"><a href="/user/{{this.id}}">Show details</a></button>
+            </div>
+        </div>
+    {{/each}}
+</div>
 </body>
 </html>
