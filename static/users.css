@@ -1,0 +1,37 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+.container{
+    height: 948px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.item{
+    background-color: lightgrey;
+    border: 3px solid lightblue;
+    height: 220px;
+    width: 220px;
+    font-size: 24px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.btn{
+    border: none;
+    outline: none;
+    padding: 10px 20px 10px 20px;
+    background-color: dimgrey;
+    cursor: pointer;
+    color: white;
+    border-radius: 3px;
+    margin-top: 5px;
+}
+
+.btn a{
+    text-decoration: none;
+    color: white;
+}

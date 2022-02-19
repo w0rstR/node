@@ -1,0 +1,33 @@
+.form{
+    display: flex;
+    flex-direction: column;
+    width: 120px;
+    font-size: 24px;
+    gap: 10px;
+}
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 950px;
+}
+input.text{
+    border: 1px solid black;
+    width: 180px;
+    height: 25px;
+    font-size: 24px;
+}
+.submit{
+    outline: none;
+    border: none;
+    padding: 10px 20px 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: dimgrey;
+    color: white;
+
+}
+
+.submit-form{
+    margin-top: 10px;
+}
