@@ -20,6 +20,33 @@ const users=[
         email:'test@mail.ru',
         password: '123123',
         age:22,
+        city:'Kiev'
+    },
+    {
+        id:3231,
+        firstname:'Alex',
+        lastname:'Sender',
+        email:'test@mail.ru',
+        password: '123123',
+        age:20,
+        city:'Lviv'
+    },
+    {
+        id:3121,
+        firstname:'Alex',
+        lastname:'Sender',
+        email:'test@mail.ru',
+        password: '123123',
+        age:21,
+        city:'Ternopil'
+    },
+    {
+        id:3123,
+        firstname:'Olex',
+        lastname:'Sender',
+        email:'test@mail.ru',
+        password: '123123',
+        age:22,
         city:'Lviv'
     },
 ]
@@ -61,10 +88,25 @@ app.get('/user/:id',(req,res)=>{
 })
 
 app.get('/users',(req,res)=>{
-    res.render('users',{users})
+    const {age,city} = req.query
+    let filteredList=[]
+    if(age&&city){
+        filteredList=users.filter(item => item.age == +age && item.city == city)
+        res.render('users',{users:filteredList})
+    }else if(age){
+        filteredList=users.filter(item => item.age == +age)
+        res.render('users',{users:filteredList})
+    }else if (city) {
+        filteredList=users.filter(item =>item.city == city)
+        res.render('users',{users:filteredList})
+    }else {
+        res.render('users',{users})
+    }
 })
 
-
+app.use((req,res)=>{
+    res.render('notfound')
+})
 
 app.listen(5200,()=>{
     console.log(`Server has started on PORT 5200`)
