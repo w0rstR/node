@@ -54,11 +54,11 @@ const users = [
 
 app.get('/login', (reg, res) => {
     res.render('login');
-})
+});
 
 app.get('/error', (req, res) => {
     res.render('error');
-})
+});
 
 
 app.post('/login', (req, res) => {
@@ -74,7 +74,7 @@ app.post('/login', (req, res) => {
         users.push({...req.body, id: new Date().getTime()})
         res.redirect('/users');
     }
-})
+});
 
 app.get('/user/:id', (req, res) => {
     const {id} = req.params;
@@ -85,7 +85,7 @@ app.get('/user/:id', (req, res) => {
         }
     }
 
-})
+});
 
 app.get('/users', (req, res) => {
     const {age, city} = req.query;
@@ -102,12 +102,12 @@ app.get('/users', (req, res) => {
     } else {
         res.render('users', {users})
     }
-})
+});
 
 app.use((req, res) => {
     res.render('notfound')
-})
+});
 
 app.listen(5200, () => {
     console.log(`Server has started on PORT 5200`);
-})
+});
