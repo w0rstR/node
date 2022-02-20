@@ -10,12 +10,16 @@
 <body>
     <div class="container">
             <div class="element">
-                <div>{{user.firstname}}</div>
-                <div>{{user.lastname}}</div>
-                <div>{{user.email}}</div>
-                <div>{{user.password}}</div>
-                <div>{{user.age}}</div>
-                <div>{{user.city}}</div>
+                <div>First name: {{user.firstname}}</div>
+                <div>Last name: {{user.lastname}}</div>
+                <div>Email: {{user.email}}</div>
+                <div>Password: {{user.password}}</div>
+                <div>Age: {{user.age}}</div>
+                <div>City: {{user.city}}</div>
+                <form action="/deleteUser" method="post" role="form">
+                    <input type="hidden" name="id" value={{user.id}}>
+                    <input type="submit" value="Видалити">
+                </form>
             </div>
     </div>
 </body>
