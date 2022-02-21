@@ -3,11 +3,13 @@ const fs = require('fs');
 
 
 
+
 fs.mkdir(path.join(__dirname,'main'),(error)=>{
     if(error){
         console.log(error);
         throw error;
     }
+
 
     fs.appendFile(path.join(__dirname,'main','f-file.txt'),'SOME DATA IN FILE',(error)=>{
         if (error){

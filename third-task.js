@@ -6,6 +6,7 @@ const list_dir = ['first-folder', 'second-folder', 'third-folder', 'fourth-folde
 const list_file = ['first-file.txt', 'second-file.txt', 'third-file.txt', 'fourth-file.txt']
 
 
+
 fs.mkdir(path.join(__dirname,'main'),(error)=>{
     if (error){
         console.log(error);
@@ -28,6 +29,8 @@ fs.mkdir(path.join(__dirname,'main'),(error)=>{
         });
     }
 });
+
+
 
 function checkDirectory(dirname) {
     fs.readdir(path.join(__dirname, dirname), (error, dr) => {
