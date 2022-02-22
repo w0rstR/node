@@ -1,20 +1,19 @@
-function isUserValid(req,res,next){
-    try{
-        const {login,password} = req.body;
+function isUserValid(req, res, next) {
+    try {
+        const {login, password} = req.body;
 
-        if(!login || !password){
-            throw new Error('Wrong login or password!!!!!!!!')
+        if (!login || !password) {
+            throw new Error('Wrong login or password!!!!!!!!');
         }
 
-        if(password.length < 5){
-            throw new Error('Not valid password')
+        if (password.length < 5) {
+            throw new Error('Not valid password');
         }
 
         next()
-    }catch (error) {
-        console.log(error)
-        res.status(400).send(error)
+    } catch (error) {
+        res.status(400).send(error);
     }
 }
 
-module.exports = isUserValid
+module.exports = isUserValid;

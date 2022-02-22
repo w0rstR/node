@@ -4,7 +4,7 @@ const UsersController = require('../controllers/usersController')
 const usersRouter = Router();
 
 
-usersRouter.get('/',UsersController.renderUsers)
+usersRouter.get('/',UsersController.renderUsers);
 
 
 

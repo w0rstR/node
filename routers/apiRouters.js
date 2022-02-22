@@ -5,6 +5,7 @@ const loginRouter = require('./loginRouter');
 const deleteUserRouter = require("./deleteUserRouter");
 const singInRouter = require("./singInRouter");
 
+
 const routes = Router();
 
 
@@ -13,5 +14,10 @@ routes.use('/user', userRouter);
 routes.use('/login', loginRouter);
 routes.use('/deleteUser', deleteUserRouter);
 routes.use('/singin', singInRouter);
+
+routes.use((req, res) => {
+    res.render('notfound');
+});
+
 
 module.exports = routes;

@@ -1,13 +1,13 @@
-const {Route,Router} = require('express');
-const usersFromDb = require('../db');
+const {Router} = require('express');
 const SinginController = require('../controllers/singinController')
+const isUserEmailValid = require("../middlware/isUserEmailValid");
 
 const singInRouter = Router();
 
 
-singInRouter.get('/',SinginController.renderPage)
+singInRouter.get('/',SinginController.renderPage);
 
 
-singInRouter.post('/',SinginController.postData)
+singInRouter.post('/',isUserEmailValid,SinginController.postData);
 
-module.exports = singInRouter
+module.exports = singInRouter;
