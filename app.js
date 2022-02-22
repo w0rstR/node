@@ -12,12 +12,12 @@ app.set('view engine', '.hbs');
 app.engine('.hbs', engine({defaultLayout: false}));
 app.set('views', path.join(__dirname, 'static'));
 
-const users = [
+let users = [
     {
         id: 31231,
         firstname: 'Alex',
         lastname: 'Sender',
-        email: 'test@mail.ru',
+        email: 'tes321t@mail.ru',
         password: '123123',
         age: 22,
         city: 'Kiev'
@@ -35,7 +35,7 @@ const users = [
         id: 3121,
         firstname: 'Alex',
         lastname: 'Sender',
-        email: 'test@mail.ru',
+        email: 'tedsst@mail.ru',
         password: '123123',
         age: 21,
         city: 'Ternopil'
@@ -44,7 +44,7 @@ const users = [
         id: 3123,
         firstname: 'Olex',
         lastname: 'Sender',
-        email: 'test@mail.ru',
+        email: 'tdasest@mail.ru',
         password: '123123',
         age: 22,
         city: 'Lviv'
@@ -65,49 +65,71 @@ app.post('/login', (req, res) => {
     const body = req.body;
     const item = users.filter(item => {
         if (item.email == body.email) {
-            return item
+            return item;
         }
     });
     if (item.length) {
-        res.redirect('/error');
+        res.render('error', {error: 'User with this email exist!'});
     } else {
-        users.push({...req.body, id: new Date().getTime()})
+        users.push({...req.body, id: new Date().getTime()});
         res.redirect('/users');
     }
 });
 
 app.get('/user/:id', (req, res) => {
     const {id} = req.params;
-
-    for (let item of users) {
-        if (item.id == id) {
-            res.render('user', {user: item})
-        }
-    }
-
+    const item = users.find(user => user.id == +id);
+    res.render('user', {user: item});
 });
 
+app.post('/deleteUser', (req, res) => {
+    users = users.filter(user => user.id !== +req.body.id);
+    res.redirect('users');
+})
+
 app.get('/users', (req, res) => {
-    const {age, city} = req.query;
-    let filteredList = [];
-    if (age && city) {
-        filteredList = users.filter(item => item.age == +age && item.city == city);
-        res.render('users', {users: filteredList})
-    } else if (age) {
-        filteredList = users.filter(item => item.age == +age);
-        res.render('users', {users: filteredList})
-    } else if (city) {
-        filteredList = users.filter(item => item.city == city);
-        res.render('users', {users: filteredList})
-    } else {
-        res.render('users', {users})
+    if (Object.keys(req.query).length) {
+        let usersList = [...users];
+        if (req.query.city) {
+            usersList = usersList.filter(item => item.city == req.query.city);
+        }
+        if (req.query.age) {
+            usersList = usersList.filter(item => item.age == +req.query.age);
+        }
+        console.log(usersList)
+        res.render('users', {users: usersList});
+        return;
     }
+    res.render('users', {users})
+});
+app.get('/singin', (req, res) => {
+    res.render('singin');
+})
+
+app.post('/singin', (req, res) => {
+    if (!req.body) {
+        res.redirect('/error');
+    }
+    const itemByEmail = users.find(item => item.email == req.body.email);
+    const itemByPass = users.find(item => item.password == req.body.password);
+
+    if (itemByEmail && itemByPass) {
+        res.redirect(`user/${itemByEmail.id}`);
+    } else {
+        res.render('notfound', {error: 'Wrong password or email!!!'});
+    }
+})
+
+
+app.get('/login', (reg, res) => {
+    res.render('login');
 });
 
 app.use((req, res) => {
-    res.render('notfound')
+    res.render('notfound');
 });
 
 app.listen(5200, () => {
     console.log(`Server has started on PORT 5200`);
 });
+

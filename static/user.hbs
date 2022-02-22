@@ -8,15 +8,19 @@
     <title>User Details</title>
 </head>
 <body>
-    <div class="container">
-            <div class="element">
-                <div>{{user.firstname}}</div>
-                <div>{{user.lastname}}</div>
-                <div>{{user.email}}</div>
-                <div>{{user.password}}</div>
-                <div>{{user.age}}</div>
-                <div>{{user.city}}</div>
-            </div>
+<div class="container">
+    <div class="element">
+        <div>{{user.firstname}}</div>
+        <div>{{user.lastname}}</div>
+        <div>{{user.email}}</div>
+        <div>{{user.password}}</div>
+        <div>{{user.age}}</div>
+        <div>{{user.city}}</div>
+        <form action="/deleteUser" method="post">
+            <input type="hidden" name="id" value="{{user.id}}">
+            <input type="submit" value="Видалити">
+        </form>
     </div>
+</div>
 </body>
 </html>
