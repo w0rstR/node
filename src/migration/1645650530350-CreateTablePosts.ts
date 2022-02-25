@@ -20,6 +20,41 @@ export class CreateTablePosts1645650530350 implements MigrationInterface {
                     isUnique: true,
                     isNullable: false,
                 },
+
+                {
+                    name: 'text',
+                    type: 'varchar',
+                    width: 250,
+                    isNullable: false,
+                },
+
+                {
+                    name: 'userId',
+                    type: 'int',
+                },
+
+                {
+                    name: 'createdAt',
+                    type: 'timestamp',
+                    isNullable: false,
+                    default: 'now()',
+                },
+
+                {
+                    name: 'deleteAt',
+                    type: 'timestamp',
+                    isNullable: true,
+                },
+            ],
+
+            foreignKeys: [
+                {
+                    columnNames: ['userId'],
+                    referencedTableName: 'Users',
+                    referencedColumnNames: ['id'],
+                    onDelete: 'CASCADE',
+                    onUpdate: 'CASCADE',
+                },
             ],
         }), true);
     }
