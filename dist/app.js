@@ -8,9 +8,37 @@ const express_1 = __importDefault(require("express"));
 const typeorm_1 = require("typeorm");
 const user_1 = require("./entity/user");
 const app = (0, express_1.default)();
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded());
 app.get('/users', async (req, res) => {
-    const users = await (0, typeorm_1.getManager)().getRepository(user_1.User).find();
+    // const users = await getManager().getRepository(User).find();
+    // res.json(users);
+    const users = await (0, typeorm_1.getManager)().getRepository(user_1.User)
+        .createQueryBuilder('user')
+        .where('user.firstName = "Alex"')
+        .getMany();
     res.json(users);
+});
+app.post('/users', async (req, res) => {
+    try {
+        const createdUser = await (0, typeorm_1.getManager)().getRepository(user_1.User).save(req.body);
+        console.log(createdUser);
+        res.status(201).json(createdUser);
+    }
+    catch (e) {
+        console.log(e);
+    }
+});
+app.put('/users/:id', async (req, res) => {
+    const { password, email } = req.body;
+    // const {id} = req.params;
+    const createdUser = await (0, typeorm_1.getManager)()
+        .getRepository(user_1.User)
+        .update({ id: Number(req.body.id) }, {
+        password,
+        email,
+    });
+    res.json(createdUser);
 });
 app.listen(5500, async () => {
     try {
