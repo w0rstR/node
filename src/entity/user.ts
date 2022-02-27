@@ -2,7 +2,6 @@ import { Column, Entity } from 'typeorm';
 
 import { CommonFields } from './commonFields';
 
-
 export interface IUser {
     firstName: string;
     lastName: string;
@@ -12,26 +11,26 @@ export interface IUser {
     password: string;
 }
 
-@Entity('Users', { database: 'okten' })
+@Entity('users', { database: 'db' })
 export class User extends CommonFields implements IUser {
     @Column({
         type: 'varchar',
         width: 255,
         nullable: false,
     })
-    firstName: string;
+        firstName: string;
 
     @Column({
         type: 'varchar',
         width: 255,
         nullable: false,
     })
-    lastName: string;
+        lastName: string;
 
     @Column({
         type: 'int',
     })
-    age?: number;
+        age?: number;
 
     @Column({
         type: 'varchar',
@@ -39,7 +38,7 @@ export class User extends CommonFields implements IUser {
         nullable: false,
         unique: true,
     })
-    phone: string;
+        phone: string;
 
     @Column({
         type: 'varchar',
@@ -47,13 +46,12 @@ export class User extends CommonFields implements IUser {
         nullable: false,
         unique: true,
     })
-    email: string;
+        email: string;
 
     @Column({
         type: 'varchar',
         width: 255,
         nullable: false,
     })
-    password: string;
-
+        password: string;
 }
