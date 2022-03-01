@@ -39,6 +39,10 @@ app.put('/users/:id', async (req, res) => {
     });
     res.json(createdUser);
 });
+app.post('/users', async (req, res) => {
+    const createdUser = await (0, typeorm_1.getManager)().getRepository(user_1.User).save(req.body);
+    res.json(createdUser);
+});
 app.delete('/users/:id', async (req, res) => {
     console.log(req.body);
     const deletedUser = await (0, typeorm_1.getManager)()
@@ -53,6 +57,10 @@ app.delete('/users/:id', async (req, res) => {
 //         .softDelete({ id: Number(req.params.id) });
 //     res.json(deletedUser);
 // });
+app.get('/posts', async (req, res) => {
+    const posts = await (0, typeorm_1.getManager)().getRepository(post_1.Post).find();
+    res.json(posts);
+});
 app.get('/posts/:userId', async (req, res) => {
     const { userId } = req.params;
     const user = await (0, typeorm_1.getManager)().getRepository(post_1.Post)
@@ -69,10 +77,6 @@ app.put('/posts/:userId', async (req, res) => {
         .update({ id: Number(userId) }, { title, text });
     res.json(updatedPost);
 });
-app.post('/users', async (req, res) => {
-    const createdUser = await (0, typeorm_1.getManager)().getRepository(user_1.User).save(req.body);
-    res.json(createdUser);
-});
 app.get('/comments', async (req, res) => {
     const comments = await (0, typeorm_1.getManager)()
         .getRepository(comment_1.Comment)
@@ -85,10 +89,23 @@ app.post('/comments', async (req, res) => {
         .save(req.body);
     res.json(createdComment);
 });
-app.get('/comments/:userId', (req, res) => {
+// app.get('/comments/:userId', async (req: Request, res: Response) => {
+//     const { userId } = req.params;
+//     const comments = await getManager()
+//         .getRepository(Comment)
+//         .createQueryBuilder('comment')
+//         .where('comment.id = :id', { id: +userId })
+//         .getMany();
+//     res.json(comments);
+// });
+app.get('/comments/:userId', async (req, res) => {
     const { userId } = req.params;
-    console.log(userId);
-    res.json(userId);
+    const comments = await (0, typeorm_1.getManager)()
+        .getRepository(comment_1.Comment)
+        .createQueryBuilder('comment')
+        .where('comment.authorId = :id', { id: +userId })
+        .getMany();
+    res.json(comments);
 });
 app.listen(5500, async () => {
     try {

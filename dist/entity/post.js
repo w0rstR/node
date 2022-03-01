@@ -9,12 +9,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Comment = void 0;
+exports.Post = void 0;
 const typeorm_1 = require("typeorm");
-const post_1 = require("./post");
 const user_1 = require("./user");
 const commonFields_1 = require("./commonFields");
-let Comment = class Comment extends commonFields_1.CommonFields {
+const comment_1 = require("./comment");
+let Post = class Post extends commonFields_1.CommonFields {
 };
 __decorate([
     (0, typeorm_1.Column)({
@@ -23,7 +23,7 @@ __decorate([
         nullable: false,
     }),
     __metadata("design:type", String)
-], Comment.prototype, "title", void 0);
+], Post.prototype, "title", void 0);
 __decorate([
     (0, typeorm_1.Column)({
         type: 'varchar',
@@ -31,47 +31,24 @@ __decorate([
         nullable: false,
     }),
     __metadata("design:type", String)
-], Comment.prototype, "text", void 0);
-__decorate([
-    (0, typeorm_1.Column)({
-        type: 'int',
-        default: 0,
-        nullable: false,
-    }),
-    __metadata("design:type", Number)
-], Comment.prototype, "like", void 0);
-__decorate([
-    (0, typeorm_1.Column)({
-        type: 'int',
-        default: 0,
-        nullable: false,
-    }),
-    __metadata("design:type", Number)
-], Comment.prototype, "dislike", void 0);
+], Post.prototype, "text", void 0);
 __decorate([
     (0, typeorm_1.Column)({
         type: 'int',
     }),
     __metadata("design:type", Number)
-], Comment.prototype, "postId", void 0);
+], Post.prototype, "userId", void 0);
 __decorate([
-    (0, typeorm_1.Column)({
-        type: 'int',
-    }),
-    __metadata("design:type", Number)
-], Comment.prototype, "authorId", void 0);
+    (0, typeorm_1.OneToMany)(() => comment_1.Comment, (comment) => comment.post),
+    __metadata("design:type", Array)
+], Post.prototype, "comments", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_1.User, (user) => user.comments),
-    (0, typeorm_1.JoinColumn)({ name: 'authorId' }),
+    (0, typeorm_1.ManyToOne)(() => user_1.User, (user) => user.posts),
+    (0, typeorm_1.JoinColumn)({ name: 'userId' }),
     __metadata("design:type", user_1.User)
-], Comment.prototype, "user", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)(() => post_1.Post, (post) => post.comments),
-    (0, typeorm_1.JoinColumn)({ name: 'postId' }),
-    __metadata("design:type", post_1.Post)
-], Comment.prototype, "post", void 0);
-Comment = __decorate([
-    (0, typeorm_1.Entity)('comments', { database: 'db' })
-], Comment);
-exports.Comment = Comment;
-//# sourceMappingURL=comment.js.map
+], Post.prototype, "user", void 0);
+Post = __decorate([
+    (0, typeorm_1.Entity)('posts', { database: 'db' })
+], Post);
+exports.Post = Post;
+//# sourceMappingURL=post.js.map

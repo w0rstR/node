@@ -1,6 +1,8 @@
 import {
-    Column, Entity,
+    Column, Entity, JoinColumn, ManyToOne,
 } from 'typeorm';
+import { Post } from './post';
+import { User } from './user';
 
 import { CommonFields } from './commonFields';
 
@@ -10,7 +12,7 @@ export interface IComment {
     like: number,
     dislike: number,
     postId:number,
-    authordId: number
+    authorId: number
 
 }
 
@@ -46,13 +48,19 @@ export class Comment extends CommonFields implements IComment {
 
     @Column({
         type: 'int',
-        nullable: false,
     })
         postId: number;
 
     @Column({
         type: 'int',
-        nullable: false,
     })
-        authordId: number;
+        authorId: number;
+
+    @ManyToOne(() => User, (user) => user.comments)
+    @JoinColumn({ name: 'authorId' })
+        user: User;
+
+    @ManyToOne(() => Post, (post) => post.comments)
+    @JoinColumn({ name: 'postId' })
+        post: Post;
 }

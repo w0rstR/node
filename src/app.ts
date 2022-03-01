@@ -41,6 +41,11 @@ app.put('/users/:id', async (req, res) => {
     res.json(createdUser);
 });
 
+app.post('/users', async (req, res) => {
+    const createdUser = await getManager().getRepository(User).save(req.body);
+    res.json(createdUser);
+});
+
 app.delete('/users/:id', async (req, res) => {
     console.log(req.body);
     const deletedUser = await getManager()
@@ -56,6 +61,11 @@ app.delete('/users/:id', async (req, res) => {
 //         .softDelete({ id: Number(req.params.id) });
 //     res.json(deletedUser);
 // });
+
+app.get('/posts', async (req:Request, res:Response) => {
+    const posts = await getManager().getRepository(Post).find();
+    res.json(posts);
+});
 
 app.get('/posts/:userId', async (req: Request, res: Response) => {
     const { userId } = req.params;
@@ -76,11 +86,6 @@ app.put('/posts/:userId', async (req:Request, res:Response) => {
     res.json(updatedPost);
 });
 
-app.post('/users', async (req, res) => {
-    const createdUser = await getManager().getRepository(User).save(req.body);
-    res.json(createdUser);
-});
-
 app.get('/comments', async (req: Request, res: Response) => {
     const comments = await getManager()
         .getRepository(Comment)
@@ -95,10 +100,24 @@ app.post('/comments', async (req: Request, res: Response) => {
     res.json(createdComment);
 });
 
-app.get('/comments/:userId', (req: Request, res: Response) => {
+// app.get('/comments/:userId', async (req: Request, res: Response) => {
+//     const { userId } = req.params;
+//     const comments = await getManager()
+//         .getRepository(Comment)
+//         .createQueryBuilder('comment')
+//         .where('comment.id = :id', { id: +userId })
+//         .getMany();
+//     res.json(comments);
+// });
+
+app.get('/comments/:userId', async (req: Request, res: Response) => {
     const { userId } = req.params;
-    console.log(userId);
-    res.json(userId);
+    const comments = await getManager()
+        .getRepository(Comment)
+        .createQueryBuilder('comment')
+        .where('comment.authorId = :id', { id: +userId })
+        .getMany();
+    res.json(comments);
 });
 
 app.listen(5500, async () => {

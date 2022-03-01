@@ -1,8 +1,10 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
-
-export class CreateTableComments1646075440615 implements MigrationInterface {
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.createTable(new Table({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CreateTableComments1646075440615 = void 0;
+const typeorm_1 = require("typeorm");
+class CreateTableComments1646075440615 {
+    async up(queryRunner) {
+        await queryRunner.createTable(new typeorm_1.Table({
             name: 'Comments',
             columns: [
                 {
@@ -12,52 +14,44 @@ export class CreateTableComments1646075440615 implements MigrationInterface {
                     isGenerated: true,
                     generationStrategy: 'increment',
                 },
-
                 {
                     name: 'text',
                     type: 'varchar',
                     width: 255,
                     isNullable: false,
                 },
-
                 {
                     name: 'like',
                     type: 'int',
                     isNullable: false,
                     default: 0,
                 },
-
                 {
                     name: 'dislike',
                     type: 'int',
                     isNullable: false,
                     default: 0,
                 },
-
                 {
                     name: 'authorId',
                     type: 'int',
                 },
-
                 {
                     name: 'postId',
                     type: 'int',
                 },
-
                 {
                     name: 'createdAt',
                     type: 'timestamp',
                     isNullable: false,
                     default: 'now()',
                 },
-
                 {
                     name: 'deleteAt',
                     type: 'timestamp',
                     isNullable: true,
                 },
             ],
-
             foreignKeys: [
                 {
                     columnNames: ['authorId'],
@@ -76,8 +70,9 @@ export class CreateTableComments1646075440615 implements MigrationInterface {
             ],
         }), true);
     }
-
-    public async down(queryRunner: QueryRunner): Promise<void> {
+    async down(queryRunner) {
         await queryRunner.dropTable('Comments', true);
     }
 }
+exports.CreateTableComments1646075440615 = CreateTableComments1646075440615;
+//# sourceMappingURL=1646075440615-CreateTableComments.js.map
