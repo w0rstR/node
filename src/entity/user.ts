@@ -40,7 +40,6 @@ export class User extends CommonFields implements IUser {
         type: 'varchar',
         width: 255,
         nullable: false,
-        unique: true,
     })
         phone: string;
 
@@ -48,7 +47,6 @@ export class User extends CommonFields implements IUser {
         type: 'varchar',
         width: 255,
         nullable: false,
-        unique: true,
     })
         email: string;
 

@@ -43,7 +43,6 @@ __decorate([
         type: 'varchar',
         width: 255,
         nullable: false,
-        unique: true,
     }),
     __metadata("design:type", String)
 ], User.prototype, "phone", void 0);
@@ -52,7 +51,6 @@ __decorate([
         type: 'varchar',
         width: 255,
         nullable: false,
-        unique: true,
     }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
