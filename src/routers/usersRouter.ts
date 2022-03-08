@@ -1,16 +1,23 @@
 import { Router } from 'express';
 import { getManager } from 'typeorm';
 import { User } from '../entity/user';
+import { userController } from '../controller/userController';
 
 export const usersRouter = Router();
 
-usersRouter.get('/', async (req, res) => {
-    const users = await getManager().getRepository(User).find({ relations: ['posts'] });
-    res.json(users);
+// usersRouter.get('/', async (req, res) => {
+//     const users = await getManager().getRepository(User).find({ relations: ['posts'] });
+//     res.json(users);
+//
+//     // const users = await getManager().getRepository(User).find();
+//     // res.json(users);
+// });
+// usersRouter.get('/', async (req, res) => {
+//     const users = await getManager().getRepository(User).find({ relations: ['posts'] });
+//     res.json(users);
+// });
 
-    // const users = await getManager().getRepository(User).find();
-    // res.json(users);
-});
+usersRouter.get('/', userController.getUsers);
 
 usersRouter.get('/:id', async (req, res) => {
     const { id } = req.params;
@@ -25,10 +32,12 @@ usersRouter.get('/:id', async (req, res) => {
     // res.json(users);
 });
 
-usersRouter.post('/', async (req, res) => {
-    const createdUser = await getManager().getRepository(User).save(req.body);
-    res.json(createdUser);
-});
+// usersRouter.post('/', async (req, res) => {
+//     const createdUser = await getManager().getRepository(User).save(req.body);
+//     res.json(createdUser);
+// });
+
+usersRouter.post('/', userController.createUser);
 
 usersRouter.put('/:id', async (req, res) => {
     const { password, email } = req.body;
