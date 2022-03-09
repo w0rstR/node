@@ -13,6 +13,10 @@ class UserServices {
         return createdUser;
     }
 
+    public async getUserByEmail(email:string): Promise<IUser | undefined> {
+        return userRepository.getUserByEmail(email);
+    }
+
     private async _hashPassword(password:string): Promise<string> {
         return bcrypt.hash(password, 10);
     }

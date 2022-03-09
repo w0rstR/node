@@ -14,6 +14,9 @@ class UserServices {
         const createdUser = await userRepository_1.userRepository.createUser(dataSave);
         return createdUser;
     }
+    async getUserByEmail(email) {
+        return userRepository_1.userRepository.getUserByEmail(email);
+    }
     async _hashPassword(password) {
         return bcrypt_1.default.hash(password, 10);
     }
