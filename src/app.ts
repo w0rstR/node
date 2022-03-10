@@ -9,7 +9,9 @@ app.use(express.urlencoded());
 
 app.use(routes);
 
-app.listen(5500, async () => {
+const { PORT } = process.env;
+
+app.listen(PORT, async () => {
     try {
         const connection = await createConnection();
         if (connection) {

@@ -17,6 +17,18 @@ class UserServices {
         return userRepository.getUserByEmail(email);
     }
 
+    public async getUsers():Promise<Array<IUser | undefined>> {
+        return userRepository.getUsers();
+    }
+
+    public async getUserById(id: number):Promise<IUser | undefined> {
+        return userRepository.getUserById(id);
+    }
+
+    public async updateUserById(id:number, email:string, password:string):Promise<Object> {
+        return userRepository.updateUserById(id, password, email);
+    }
+
     private async _hashPassword(password:string): Promise<string> {
         return bcrypt.hash(password, 10);
     }

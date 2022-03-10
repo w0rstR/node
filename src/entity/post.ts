@@ -9,7 +9,7 @@ export interface IPost {
     title: string;
     text: string;
     userId: number;
-    comments: IComment[];
+    comments?: IComment[];
 }
 
 @Entity('posts', { database: 'db' })

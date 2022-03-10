@@ -1,8 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userController = void 0;
-const typeorm_1 = require("typeorm");
-const user_1 = require("../entity/user");
 const userServices_1 = require("../services/userServices");
 class UserController {
     async createUser(req, res) {
@@ -10,14 +8,24 @@ class UserController {
         return res.json(createdUser);
     }
     async getUsers(req, res) {
-        const users = await (0, typeorm_1.getManager)().getRepository(user_1.User).find({ relations: ['posts'] });
+        const users = await userServices_1.userService.getUsers();
         res.json(users);
     }
     async getUserByEmail(req, res) {
         const { email } = req.body;
-        console.log(email);
         const user = await userServices_1.userService.getUserByEmail(email);
         return res.json(user);
+    }
+    async getUserById(req, res) {
+        const { id } = req.params;
+        const user = await userServices_1.userService.getUserById(+id);
+        res.json(user);
+    }
+    async updateUserById(req, res) {
+        const { email, password } = req.body;
+        const { id } = req.params;
+        const updatedUser = await userServices_1.userService.updateUserById(+id, email, password);
+        res.json(updatedUser);
     }
 }
 exports.userController = new UserController();

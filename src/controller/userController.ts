@@ -1,6 +1,5 @@
-import { getManager } from 'typeorm';
 import { Request, Response } from 'express';
-import { IUser, User } from '../entity/user';
+import { IUser } from '../entity/user';
 import { userService } from '../services/userServices';
 
 class UserController {
@@ -10,15 +9,27 @@ class UserController {
     }
 
     public async getUsers(req:Request, res:Response) {
-        const users = await getManager().getRepository(User).find({ relations: ['posts'] });
+        const users = await userService.getUsers();
         res.json(users);
     }
 
     public async getUserByEmail(req:Request, res:Response):Promise<Response<IUser>> {
         const { email } = req.body;
-        console.log(email);
         const user = await userService.getUserByEmail(email);
         return res.json(user);
+    }
+
+    public async getUserById(req:Request, res:Response) {
+        const { id } = req.params;
+        const user = await userService.getUserById(+id);
+        res.json(user);
+    }
+
+    public async updateUserById(req:Request, res:Response) {
+        const { email, password } = req.body;
+        const { id } = req.params;
+        const updatedUser = await userService.updateUserById(+id, email, password);
+        res.json(updatedUser);
     }
 }
 

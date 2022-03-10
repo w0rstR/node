@@ -17,6 +17,15 @@ class UserServices {
     async getUserByEmail(email) {
         return userRepository_1.userRepository.getUserByEmail(email);
     }
+    async getUsers() {
+        return userRepository_1.userRepository.getUsers();
+    }
+    async getUserById(id) {
+        return userRepository_1.userRepository.getUserById(id);
+    }
+    async updateUserById(id, email, password) {
+        return userRepository_1.userRepository.updateUserById(id, password, email);
+    }
     async _hashPassword(password) {
         return bcrypt_1.default.hash(password, 10);
     }

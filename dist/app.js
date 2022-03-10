@@ -11,7 +11,8 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded());
 app.use(apiRouters_1.routes);
-app.listen(5500, async () => {
+const { PORT } = process.env;
+app.listen(PORT, async () => {
     try {
         const connection = await (0, typeorm_1.createConnection)();
         if (connection) {

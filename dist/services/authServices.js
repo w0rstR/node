@@ -2,16 +2,26 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authService = void 0;
 const userServices_1 = require("./userServices");
-// import { IUser } from '../entity/user';
+const tokenServices_1 = require("./tokenServices");
 class AuthServices {
-    async registaration(req, res) {
-        // const user = req.body;
-        const { email } = req.body;
+    async registaration(body) {
+        const { email } = body;
         const userFromDb = await userServices_1.userService.getUserByEmail(email);
         if (userFromDb) {
             throw new Error(`User with email ${email} already exists`);
         }
-        // const createdUser = userService.createUser(user);
+        const createdUser = await userServices_1.userService.createUser(body);
+        return this._getTokenData(createdUser);
+    }
+    async _getTokenData(userData) {
+        const { id, email } = userData;
+        const tokenPair = await tokenServices_1.tokenService.generateTokenPair({ userId: id, userEmail: email });
+        await tokenServices_1.tokenService.saveToken(id, tokenPair.refreshToken);
+        return {
+            ...tokenPair,
+            userId: id,
+            userEmail: email,
+        };
     }
 }
 exports.authService = new AuthServices();

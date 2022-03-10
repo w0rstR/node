@@ -21,6 +21,26 @@ let UserRepository = class UserRepository extends typeorm_1.Repository {
             .andWhere('user.deletedAt IS NULL')
             .getOne();
     }
+    async getUsers() {
+        return (0, typeorm_1.getManager)()
+            .getRepository(user_1.User)
+            .find({ relations: ['posts'] });
+    }
+    async getUserById(id) {
+        return (0, typeorm_1.getManager)()
+            .getRepository(user_1.User)
+            .createQueryBuilder('user')
+            .where('user.id = :id', { id })
+            .getOne();
+    }
+    async updateUserById(id, password, email) {
+        return (0, typeorm_1.getManager)()
+            .getRepository(user_1.User)
+            .update({ id }, {
+            password,
+            email,
+        });
+    }
 };
 UserRepository = __decorate([
     (0, typeorm_1.EntityRepository)(user_1.User)
