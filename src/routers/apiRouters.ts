@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import { usersRouter } from './usersRouter';
-import { postsRouter } from './postsRouter';
-import { commentsRouter } from './commentsRouter';
+import { postRouter } from './postsRouter';
+import { commentRouter } from './commentsRouter';
 import { authRouter } from './authRouter';
 
 export const routes = Router();
 
 routes.use('/users', usersRouter);
-routes.use('/posts', postsRouter);
-routes.use('/comments', commentsRouter);
+routes.use('/posts', postRouter);
+routes.use('/comments', commentRouter);
 routes.use('/auth', authRouter);

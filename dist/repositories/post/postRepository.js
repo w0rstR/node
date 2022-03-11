@@ -13,6 +13,28 @@ let PostRepository = class PostRepository extends typeorm_1.Repository {
     async getPosts() {
         return (0, typeorm_1.getManager)().getRepository(post_1.Post).find();
     }
+    async getPostByUserId(userId) {
+        return (0, typeorm_1.getManager)()
+            .getRepository(post_1.Post)
+            .createQueryBuilder('post')
+            .where('post.userId = :id', { id: +userId })
+            .getMany();
+    }
+    async updatePostById(id, title, text) {
+        return (0, typeorm_1.getManager)()
+            .getRepository(post_1.Post)
+            .update({ id }, { title, text });
+    }
+    async deletePostById(id) {
+        return (0, typeorm_1.getManager)()
+            .getRepository(post_1.Post)
+            .delete({ id });
+    }
+    async createPost(post) {
+        return (0, typeorm_1.getManager)()
+            .getRepository(post_1.Post)
+            .save(post);
+    }
 };
 PostRepository = __decorate([
     (0, typeorm_1.EntityRepository)(post_1.Post)

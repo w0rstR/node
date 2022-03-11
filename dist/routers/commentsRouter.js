@@ -1,31 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.commentsRouter = void 0;
+exports.commentRouter = void 0;
 const express_1 = require("express");
-const typeorm_1 = require("typeorm");
-const comment_1 = require("../entity/comment");
-exports.commentsRouter = (0, express_1.Router)();
-exports.commentsRouter.get('/', async (req, res) => {
-    const comments = await (0, typeorm_1.getManager)()
-        .getRepository(comment_1.Comment)
-        .find();
-    res.json(comments);
-});
-exports.commentsRouter.post('/', async (req, res) => {
-    const createdComment = await (0, typeorm_1.getManager)()
-        .getRepository(comment_1.Comment)
-        .save(req.body);
-    res.json(createdComment);
-});
-exports.commentsRouter.get('/:userId', async (req, res) => {
-    const { userId } = req.params;
-    const comments = await (0, typeorm_1.getManager)()
-        .getRepository(comment_1.Comment)
-        .createQueryBuilder('comment')
-        .where('comment.authorId = :id', { id: +userId })
-        .leftJoinAndSelect('comment.user', 'user')
-        .leftJoinAndSelect('comment.post', 'post')
-        .getMany();
-    res.json(comments);
-});
+const commentController_1 = require("../controller/commentController");
+exports.commentRouter = (0, express_1.Router)();
+exports.commentRouter.get('/', commentController_1.commentController.getComments);
+exports.commentRouter.post('/', commentController_1.commentController.createComment);
+exports.commentRouter.get('/:id', commentController_1.commentController.getCommentsByUserId);
 //# sourceMappingURL=commentsRouter.js.map
