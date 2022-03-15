@@ -29,6 +29,18 @@ let CommentRepository = class CommentRepository extends typeorm_1.Repository {
             .leftJoinAndSelect('comment.post', 'post')
             .getMany();
     }
+    async deleteCommentByUserId(id) {
+        return (0, typeorm_1.getManager)()
+            .getRepository(comment_1.Comment)
+            .delete({ id });
+    }
+    async updateCommentById(id, text, like, dislike, authorId, postId, title) {
+        return (0, typeorm_1.getManager)()
+            .getRepository(comment_1.Comment)
+            .update({ id }, {
+            text, like, dislike, authorId, postId, title,
+        });
+    }
 };
 CommentRepository = __decorate([
     (0, typeorm_1.EntityRepository)(comment_1.Comment)

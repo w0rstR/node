@@ -12,9 +12,20 @@ class CommentController {
         return res.json(createdComment);
     }
     async getCommentsByUserId(req, res) {
-        const { id } = req.params;
-        const comments = await commentService_1.commentService.getCommentsByUserId(+id);
+        const { userId } = req.params;
+        const comments = await commentService_1.commentService.getCommentsByUserId(+userId);
         return res.json(comments);
+    }
+    async deleteCommentByUserId(req, res) {
+        const { id } = req.params;
+        const deletedComment = await commentService_1.commentService.deleteCommentByUserId(+id);
+        return res.json(deletedComment);
+    }
+    async updateCommentById(req, res) {
+        const { id } = req.params;
+        const { text, title, like, dislike, authorId, postId, } = req.body;
+        const updatedComment = await commentService_1.commentService.updateCommentById(+id, text, like, dislike, authorId, postId, title);
+        return res.json(updatedComment);
     }
 }
 exports.commentController = new CommentController();

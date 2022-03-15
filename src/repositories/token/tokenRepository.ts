@@ -11,6 +11,10 @@ class TokenRepository {
     public async findTokenByUser(userId:number):Promise<IToken | undefined> {
         return getManager().getRepository(Token).findOne({ userId });
     }
+
+    public async deleteUserToken(userId: number | undefined):Promise<Object> {
+        return getManager().getRepository(Token).delete({ userId });
+    }
 }
 
 export const tokenRepository = new TokenRepository();

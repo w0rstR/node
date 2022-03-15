@@ -14,9 +14,32 @@ class CommentController {
     }
 
     public async getCommentsByUserId(req:Request, res:Response):Promise<Response<IComment>> {
-        const { id } = req.params;
-        const comments = await commentService.getCommentsByUserId(+id);
+        const { userId } = req.params;
+        const comments = await commentService.getCommentsByUserId(+userId);
         return res.json(comments);
+    }
+
+    public async deleteCommentByUserId(req:Request, res:Response):Promise<Response<Object>> {
+        const { id } = req.params;
+        const deletedComment = await commentService.deleteCommentByUserId(+id);
+        return res.json(deletedComment);
+    }
+
+    public async updateCommentById(req:Request, res:Response):Promise<Response<Object>> {
+        const { id } = req.params;
+        const {
+            text, title, like, dislike, authorId, postId,
+        } = req.body;
+        const updatedComment = await commentService.updateCommentById(
+            +id,
+            text,
+            like,
+            dislike,
+            authorId,
+            postId,
+            title,
+        );
+        return res.json(updatedComment);
     }
 }
 

@@ -12,6 +12,9 @@ class TokenRepository {
     async findTokenByUser(userId) {
         return (0, typeorm_1.getManager)().getRepository(token_1.Token).findOne({ userId });
     }
+    async deleteUserToken(userId) {
+        return (0, typeorm_1.getManager)().getRepository(token_1.Token).delete({ userId });
+    }
 }
 exports.tokenRepository = new TokenRepository();
 //# sourceMappingURL=tokenRepository.js.map

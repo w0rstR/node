@@ -12,6 +12,12 @@ class CommentService {
     async getCommentsByUserId(userId) {
         return commentRepository_1.сommentRepository.getCommentsByUserId(userId);
     }
+    async deleteCommentByUserId(id) {
+        return commentRepository_1.сommentRepository.deleteCommentByUserId(id);
+    }
+    async updateCommentById(id, text, like, dislike, authorId, postId, title) {
+        return commentRepository_1.сommentRepository.updateCommentById(id, text, like, dislike, authorId, postId, title);
+    }
 }
 exports.commentService = new CommentService();
 //# sourceMappingURL=commentService.js.map

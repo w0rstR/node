@@ -7,6 +7,7 @@ class CreateTableTokens1646846743891 {
             CREATE TABLE IF NOT EXISTS Tokens(
                 id INT PRIMARY KEY AUTO_INCREMENT,
                 refreshToken VARCHAR(250) NOT NULL,
+                accessToken VARCHAR(250) NOT NULL,
                 userId INT NOT NULL,
                 FOREIGN KEY (userId) REFERENCES Users (id)
             )

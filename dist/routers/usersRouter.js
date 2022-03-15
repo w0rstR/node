@@ -8,18 +8,4 @@ exports.usersRouter.get('/', userController_1.userController.getUsers);
 exports.usersRouter.get('/:id', userController_1.userController.getUserById);
 exports.usersRouter.post('/', userController_1.userController.createUser);
 exports.usersRouter.put('/:id', userController_1.userController.updateUserById);
-// usersRouter.delete('/:id', async (req, res) => {
-//     console.log(req.params);
-//     const deletedUser = await getManager()
-//         .getRepository(User)
-//         .delete({ id: Number(req.params.id) });
-//     res.json(deletedUser);
-// });
-// app.delete('/users/:id', async (req, res) => {
-//     console.log(req.body);
-//     const deletedUser = await getManager()
-//         .getRepository(User)
-//         .softDelete({ id: Number(req.params.id) });
-//     res.json(deletedUser);
-// });
 //# sourceMappingURL=usersRouter.js.map

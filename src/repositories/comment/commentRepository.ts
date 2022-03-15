@@ -25,6 +25,28 @@ class CommentRepository extends Repository<Comment> implements ICommentRepositor
             .leftJoinAndSelect('comment.post', 'post')
             .getMany();
     }
+
+    public async deleteCommentByUserId(id:number):Promise<Object> {
+        return getManager()
+            .getRepository(Comment)
+            .delete({ id });
+    }
+
+    public async updateCommentById(
+        id:number,
+        text:string,
+        like:number,
+        dislike:number,
+        authorId:number,
+        postId:number,
+        title:string,
+    ):Promise<Object> {
+        return getManager()
+            .getRepository(Comment)
+            .update({ id }, {
+                text, like, dislike, authorId, postId, title,
+            });
+    }
 }
 
 export const сommentRepository = new CommentRepository();

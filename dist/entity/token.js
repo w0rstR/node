@@ -25,6 +25,14 @@ __decorate([
 ], Token.prototype, "refreshToken", void 0);
 __decorate([
     (0, typeorm_1.Column)({
+        type: 'varchar',
+        width: 250,
+        nullable: false,
+    }),
+    __metadata("design:type", String)
+], Token.prototype, "accessToken", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
         type: 'int',
     }),
     __metadata("design:type", Number)

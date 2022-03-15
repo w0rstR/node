@@ -13,10 +13,14 @@ class AuthServices {
         return this._getTokenData(createdUser);
     }
 
+    public async login(body:IUser) {
+        return this._getTokenData(body);
+    }
+
     private async _getTokenData(userData: IUser) {
         const { id, email } = userData;
         const tokenPair = await tokenService.generateTokenPair({ userId: id, userEmail: email });
-        await tokenService.saveToken(id, tokenPair.refreshToken);
+        await tokenService.saveToken(id, tokenPair.refreshToken, tokenPair.accessToken);
 
         return {
             ...tokenPair,

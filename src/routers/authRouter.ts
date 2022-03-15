@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import { authController } from '../controller/authController';
+import { authMiddlewares } from '../middlewares/authMiddlewares';
 
 const router = Router();
 
 router.post('/registration', authController.registration);
-router.post('/login', authController.registration);
-router.post('logout', authController.registration);
+router.post('/login', authController.login);
+router.get('/logout', authMiddlewares.checkAccessToken, authController.logout);
 router.post('/refresh', authController.registration);
 
 export const authRouter = router;
