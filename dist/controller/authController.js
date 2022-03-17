@@ -17,7 +17,6 @@ class AuthController {
     async logout(req, res) {
         const { id } = req.user;
         res.clearCookie('refreshToken');
-        console.log(res.get('accessToken'));
         await tokenServices_1.tokenService.deleteUserToken(id);
         return res.json('Ok');
     }
@@ -33,8 +32,13 @@ class AuthController {
         }
         const tokenPair = await authServices_1.authService.login(userFromEmail);
         res.cookie('refreshToken', tokenPair.refreshToken, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true });
-        console.log(tokenPair);
         res.json('oke');
+    }
+    async refresh(req, res) {
+        const { refreshToken } = req.cookies;
+        const payload = await authServices_1.authService.refresh(refreshToken);
+        res.cookie('refreshToken', payload.refreshToken, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true });
+        res.json(payload);
     }
 }
 exports.authController = new AuthController();

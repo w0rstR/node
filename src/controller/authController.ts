@@ -22,7 +22,6 @@ class AuthController {
     public async logout(req:IRequestExtended, res:Response):Promise<Response<String>> {
         const { id } = req.user as IUser;
         res.clearCookie('refreshToken');
-        console.log(res.get('accessToken'));
         await tokenService.deleteUserToken(id);
         return res.json('Ok');
     }
@@ -46,9 +45,19 @@ class AuthController {
             { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true },
         );
 
-        console.log(tokenPair);
-
         res.json('oke');
+    }
+
+    public async refresh(req:Request, res:Response) {
+        const { refreshToken } = req.cookies;
+        const payload = await authService.refresh(refreshToken);
+
+        res.cookie(
+            'refreshToken',
+            payload.refreshToken,
+            { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true },
+        );
+        res.json(payload);
     }
 }
 

@@ -17,6 +17,17 @@ class AuthServices {
         return this._getTokenData(body);
     }
 
+    public async refresh(refreshToken:string) {
+        const payloadFromToken = await tokenService.verifyToken(refreshToken, 'refresh');
+        const userFromPayload = await userService.getUserByEmail(payloadFromToken.userEmail);
+
+        if (!payloadFromToken || !userFromPayload) {
+            throw new Error('This token is wrong!');
+        }
+
+        return this._getTokenData(userFromPayload);
+    }
+
     private async _getTokenData(userData: IUser) {
         const { id, email } = userData;
         const tokenPair = await tokenService.generateTokenPair({ userId: id, userEmail: email });
