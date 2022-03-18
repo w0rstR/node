@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { IComment } from '../entity/comment';
-import { commentService } from '../services/commentService';
+import { commentService } from '../services';
 
 class CommentController {
     public async getComments(req:Request, res:Response):Promise<Response<IComment>> {

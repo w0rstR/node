@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { postService } from '../services/postService';
+import { postService } from '../services';
 import { IPost } from '../entity/post';
 
 class PostController {

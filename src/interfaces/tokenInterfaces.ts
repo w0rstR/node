@@ -12,4 +12,11 @@ export interface IUserPayload {
     userEmail: string,
 }
 
+export interface ITokenPayload{
+    accessToken: string;
+    refreshToken: string;
+    userId: number,
+    userEmail: string,
+}
+
 export type ITokenData = ITokenPair & IUserPayload;

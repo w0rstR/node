@@ -1,13 +1,11 @@
 import { Request, Response } from 'express';
-import bcrypt from 'bcrypt';
-import { authService } from '../services/authServices';
 import { IRequestExtended } from '../interfaces/requestExtendedInterface';
-import { tokenService } from '../services/tokenServices';
+import { tokenService, authService } from '../services';
 import { IUser } from '../entity/user';
-import { userService } from '../services/userServices';
+import { ITokenPayload } from '../interfaces/tokenInterfaces';
 
 class AuthController {
-    public async registration(req:Request, res:Response) {
+    public async registration(req:Request, res:Response):Promise<Response<ITokenPayload>> {
         const data = await authService.registaration(req.body);
 
         res.cookie(
@@ -23,32 +21,16 @@ class AuthController {
         const { id } = req.user as IUser;
         res.clearCookie('refreshToken');
         await tokenService.deleteUserToken(id);
-        return res.json('Ok');
+        return res.json('Logout is successfully completed');
     }
 
-    public async login(req:Request, res:Response) {
+    public async login(req:Request, res:Response):Promise<Response<ITokenPayload>> {
         const { email, password } = req.body;
-        const userFromEmail = await userService.getUserByEmail(email);
-        if (!userFromEmail) {
-            throw new Error('This email not exists!');
-        }
-        const isPasswordCorrect = await bcrypt.compare(password, userFromEmail.password);
-        if (!isPasswordCorrect) {
-            throw new Error('This password is incorrect');
-        }
-
-        const tokenPair = await authService.login(userFromEmail);
-
-        res.cookie(
-            'refreshToken',
-            tokenPair.refreshToken,
-            { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true },
-        );
-
-        res.json('oke');
+        const tokenPair = await authService.login(email, password);
+        return res.json(tokenPair);
     }
 
-    public async refresh(req:Request, res:Response) {
+    public async refresh(req:Request, res:Response):Promise<Response<ITokenPayload>> {
         const { refreshToken } = req.cookies;
         const payload = await authService.refresh(refreshToken);
 
@@ -57,7 +39,7 @@ class AuthController {
             payload.refreshToken,
             { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true },
         );
-        res.json(payload);
+        return res.json(payload);
     }
 }
 

@@ -1,7 +1,6 @@
-import { NextFunction, Response } from 'express';
-import { tokenService } from '../services/tokenServices';
-import { userService } from '../services/userServices';
-import { IRequestExtended } from '../interfaces/requestExtendedInterface';
+import { NextFunction, Request, Response } from 'express';
+import { userService, tokenService } from '../services';
+import { IRequestExtended } from '../interfaces';
 
 class AuthMiddlewares {
     public async checkAccessToken(req:IRequestExtended, res:Response, next:NextFunction) {
@@ -23,6 +22,20 @@ class AuthMiddlewares {
             req.user = userFromToken;
             next();
         } catch (e: any) {
+            res.json({ status: 400, message: e.message });
+        }
+    }
+
+    public async checkEmailExist(req:Request, res:Response, next:NextFunction) {
+        try {
+            const { email } = req.body;
+            const userFromEmail = await userService.getUserByEmail(email);
+            if (!userFromEmail) {
+                throw new Error('This email not exists!');
+            }
+
+            next();
+        } catch (e:any) {
             res.json({ status: 400, message: e.message });
         }
     }
