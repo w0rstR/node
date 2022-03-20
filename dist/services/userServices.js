@@ -26,6 +26,10 @@ class UserServices {
     async updateUserById(id, email, password) {
         return userRepository_1.userRepository.updateUserById(id, password, email);
     }
+    async compareUserPassword(password, hashedPassword) {
+        const isPasswordCorect = await bcrypt_1.default.compare(password, hashedPassword);
+        return isPasswordCorect;
+    }
     async _hashPassword(password) {
         return bcrypt_1.default.hash(password, 10);
     }

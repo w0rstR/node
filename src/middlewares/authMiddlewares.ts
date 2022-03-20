@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { userService, tokenService } from '../services';
 import { IRequestExtended } from '../interfaces';
 
@@ -26,16 +26,20 @@ class AuthMiddlewares {
         }
     }
 
-    public async checkEmailExist(req:Request, res:Response, next:NextFunction) {
+    public async checkRefreshToken(req:IRequestExtended, res:Response, next:NextFunction) {
         try {
-            const { email } = req.body;
-            const userFromEmail = await userService.getUserByEmail(email);
-            if (!userFromEmail) {
-                throw new Error('This email not exists!');
+            const { refreshToken } = req.cookies;
+            const payloadFromToken = await tokenService.verifyToken(refreshToken, 'refresh');
+            const userFromPayload = await userService.getUserByEmail(payloadFromToken.userEmail);
+            const tokenFromDb = await tokenService.findRefreshToken(refreshToken);
+
+            if (!payloadFromToken || !userFromPayload || !tokenFromDb) {
+                throw new Error('Wrong token');
             }
 
+            req.user = userFromPayload;
             next();
-        } catch (e:any) {
+        } catch (e: any) {
             res.json({ status: 400, message: e.message });
         }
     }

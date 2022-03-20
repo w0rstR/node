@@ -36,6 +36,10 @@ class TokenServices {
         return tokenRepository.deleteUserToken(userId);
     }
 
+    public async findRefreshToken(refreshToken:string):Promise<IToken |undefined> {
+        return tokenRepository.findRefreshToken(refreshToken);
+    }
+
     public verifyToken(token:string, tokenType:string = 'access'):IUserPayload {
         let secretWord = config.SECRET_ACCESS_KEY;
 

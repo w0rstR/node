@@ -15,15 +15,32 @@ class AuthController {
         return res.json('Logout is successfully completed');
     }
     async login(req, res) {
-        const { email, password } = req.body;
-        const tokenPair = await services_1.authService.login(email, password);
-        return res.json(tokenPair);
+        const { email, id, password: hashPassword } = req.user;
+        const { password } = req.body;
+        const isCorectPassword = await services_1.userService.compareUserPassword(password, hashPassword);
+        if (!isCorectPassword) {
+            res.status(404).json('User not found!');
+            return;
+        }
+        const { accessToken, refreshToken } = await services_1.tokenService
+            .generateTokenPair({ userId: id, userEmail: email });
+        await services_1.tokenService.saveToken(id, refreshToken, accessToken);
+        res.cookie('refreshToken', refreshToken, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true });
+        res.json({
+            accessToken,
+            user: req.user,
+        });
     }
     async refresh(req, res) {
-        const { refreshToken } = req.cookies;
-        const payload = await services_1.authService.refresh(refreshToken);
-        res.cookie('refreshToken', payload.refreshToken, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true });
-        return res.json(payload);
+        const { email, id } = req.user;
+        const { refreshToken, accessToken } = await services_1.tokenService
+            .generateTokenPair({ userId: id, userEmail: email });
+        await services_1.tokenService.saveToken(id, refreshToken, accessToken);
+        res.cookie('refreshToken', refreshToken, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true });
+        return res.json({
+            refreshToken,
+            accessToken,
+        });
     }
 }
 exports.authController = new AuthController();

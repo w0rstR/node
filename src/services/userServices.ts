@@ -29,6 +29,11 @@ class UserServices {
         return userRepository.updateUserById(id, password, email);
     }
 
+    public async compareUserPassword(password:string, hashedPassword:string):Promise<boolean> {
+        const isPasswordCorect = await bcrypt.compare(password, hashedPassword);
+        return isPasswordCorect;
+    }
+
     private async _hashPassword(password:string): Promise<string> {
         return bcrypt.hash(password, 10);
     }

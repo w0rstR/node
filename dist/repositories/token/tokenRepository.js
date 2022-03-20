@@ -21,6 +21,9 @@ let TokenRepository = class TokenRepository extends typeorm_1.Repository {
     async deleteUserToken(userId) {
         return (0, typeorm_1.getManager)().getRepository(token_1.Token).delete({ userId });
     }
+    async findRefreshToken(refreshToken) {
+        return (0, typeorm_1.getManager)().getRepository(token_1.Token).findOne({ refreshToken });
+    }
 };
 TokenRepository = __decorate([
     (0, typeorm_1.EntityRepository)(token_1.Token)

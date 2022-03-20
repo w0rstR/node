@@ -29,6 +29,9 @@ class TokenServices {
     async deleteUserToken(userId) {
         return tokenRepository_1.tokenRepository.deleteUserToken(userId);
     }
+    async findRefreshToken(refreshToken) {
+        return tokenRepository_1.tokenRepository.findRefreshToken(refreshToken);
+    }
     verifyToken(token, tokenType = 'access') {
         let secretWord = config_1.config.SECRET_ACCESS_KEY;
         if (tokenType === 'refresh') {

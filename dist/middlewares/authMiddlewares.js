@@ -22,13 +22,16 @@ class AuthMiddlewares {
             res.json({ status: 400, message: e.message });
         }
     }
-    async checkEmailExist(req, res, next) {
+    async checkRefreshToken(req, res, next) {
         try {
-            const { email } = req.body;
-            const userFromEmail = await services_1.userService.getUserByEmail(email);
-            if (!userFromEmail) {
-                throw new Error('This email not exists!');
+            const { refreshToken } = req.cookies;
+            const payloadFromToken = await services_1.tokenService.verifyToken(refreshToken, 'refresh');
+            const userFromPayload = await services_1.userService.getUserByEmail(payloadFromToken.userEmail);
+            const tokenFromDb = await services_1.tokenService.findRefreshToken(refreshToken);
+            if (!payloadFromToken || !userFromPayload || !tokenFromDb) {
+                throw new Error('Wrong token');
             }
+            req.user = userFromPayload;
             next();
         }
         catch (e) {

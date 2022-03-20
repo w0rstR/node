@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { IRequestExtended } from '../interfaces/requestExtendedInterface';
-import { tokenService, authService } from '../services';
+import { tokenService, authService, userService } from '../services';
 import { IUser } from '../entity/user';
 import { ITokenPayload } from '../interfaces/tokenInterfaces';
 
@@ -24,22 +24,49 @@ class AuthController {
         return res.json('Logout is successfully completed');
     }
 
-    public async login(req:Request, res:Response):Promise<Response<ITokenPayload>> {
-        const { email, password } = req.body;
-        const tokenPair = await authService.login(email, password);
-        return res.json(tokenPair);
-    }
+    public async login(req:IRequestExtended, res:Response) {
+        const { email, id, password: hashPassword } = req.user as IUser;
+        const { password } = req.body;
 
-    public async refresh(req:Request, res:Response):Promise<Response<ITokenPayload>> {
-        const { refreshToken } = req.cookies;
-        const payload = await authService.refresh(refreshToken);
+        const isCorectPassword = await userService.compareUserPassword(password, hashPassword);
+
+        if (!isCorectPassword) {
+            res.status(404).json('User not found!');
+            return;
+        }
+
+        const { accessToken, refreshToken } = await tokenService
+            .generateTokenPair({ userId: id, userEmail: email });
+        await tokenService.saveToken(id, refreshToken, accessToken);
 
         res.cookie(
             'refreshToken',
-            payload.refreshToken,
+            refreshToken,
             { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true },
         );
-        return res.json(payload);
+
+        res.json({
+            accessToken,
+            user: req.user,
+        });
+    }
+
+    public async refresh(req:IRequestExtended, res:Response) {
+        const { email, id } = req.user as IUser;
+
+        const { refreshToken, accessToken } = await tokenService
+            .generateTokenPair({ userId: id, userEmail: email });
+        await tokenService.saveToken(id, refreshToken, accessToken);
+
+        res.cookie(
+            'refreshToken',
+            refreshToken,
+            { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true },
+        );
+        return res.json({
+            refreshToken,
+            accessToken,
+        });
     }
 }
 
