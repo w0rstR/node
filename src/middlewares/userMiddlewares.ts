@@ -1,6 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { userService } from '../services';
 import { IRequestExtended } from '../interfaces';
+import { userValidators, paramValidator } from '../validators';
 
 class UserMiddlewares {
     public async checkEmailExist(req:IRequestExtended, res:Response, next:NextFunction) {
@@ -31,6 +32,51 @@ class UserMiddlewares {
             next();
         } catch (e:any) {
             res.json({ status: 400, message: e.message });
+        }
+    }
+
+    public async validateCreateUser(req:IRequestExtended, res:Response, next:NextFunction)
+        :Promise<void> {
+        try {
+            const { error, value } = userValidators.crateUser.validate(req.body);
+
+            if (error) {
+                throw new Error(error.details[0].message);
+            }
+            req.body = value;
+            next();
+        } catch (e:any) {
+            res.status(400).json(e.message);
+        }
+    }
+
+    public async validateLoginUser(req:IRequestExtended, res:Response, next:NextFunction)
+        :Promise<void> {
+        try {
+            const { error, value } = userValidators.loginUser.validate(req.body);
+
+            if (error) {
+                throw new Error('Wrong email or password!');
+            }
+            req.body = value;
+            next();
+        } catch (e:any) {
+            res.status(400).json(e.message);
+        }
+    }
+
+    public async validateId(req:IRequestExtended, res:Response, next:NextFunction)
+        :Promise<void> {
+        try {
+            const { error, value } = paramValidator.id.validate(req.params);
+
+            if (error) {
+                throw new Error('Wrong id user!');
+            }
+            req.body = value;
+            next();
+        } catch (e:any) {
+            res.status(400).json(e.message);
         }
     }
 }
