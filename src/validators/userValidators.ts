@@ -12,7 +12,7 @@ export const userValidators = {
     }),
     loginUser: Joi.object({
         email: Joi.string().regex(regexp.EMAIL).required(),
-        password: Joi.string().regex(regexp.PASSWORD).required(),
+        password: Joi.string().required(),
     }),
 
 };

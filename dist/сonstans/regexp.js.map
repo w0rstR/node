@@ -1,1 +1,1 @@
-{"version":3,"file":"regexp.js","sourceRoot":"","sources":["../../src/сonstans/regexp.ts"],"names":[],"mappings":";;;AAAa,QAAA,MAAM,GAAG;IAClB,KAAK,EAAE,uEAAuE;IAC9E,KAAK,EAAE,qCAAqC;IAC5C,QAAQ,EAAE,0EAA0E;CACvF,CAAC"}
+{"version":3,"file":"regexp.js","sourceRoot":"","sources":["../../src/сonstans/regexp.ts"],"names":[],"mappings":";;;AAAa,QAAA,MAAM,GAAG;IAClB,KAAK,EAAE,sBAAsB;IAC7B,KAAK,EAAE,qCAAqC;IAC5C,QAAQ,EAAE,0EAA0E;CACvF,CAAC"}

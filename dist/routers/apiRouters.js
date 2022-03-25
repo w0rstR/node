@@ -11,4 +11,9 @@ exports.routes.use('/users', usersRouter_1.usersRouter);
 exports.routes.use('/posts', postsRouter_1.postRouter);
 exports.routes.use('/comments', commentsRouter_1.commentRouter);
 exports.routes.use('/auth', authRouter_1.authRouter);
+// @ts-ignore
+exports.routes.use('*', (err, req, res, next) => {
+    res.status(err.code || 500)
+        .json({ message: err.message });
+});
 //# sourceMappingURL=apiRouters.js.map

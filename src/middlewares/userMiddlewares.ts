@@ -2,6 +2,7 @@ import { NextFunction, Response } from 'express';
 import { userService } from '../services';
 import { IRequestExtended } from '../interfaces';
 import { userValidators, paramValidator } from '../validators';
+import { ErrorHendler } from '../error/errorHendler';
 
 class UserMiddlewares {
     public async checkEmailExist(req:IRequestExtended, res:Response, next:NextFunction) {
@@ -10,13 +11,13 @@ class UserMiddlewares {
             const userFromEmail = await userService.getUserByEmail(email);
 
             if (!userFromEmail) {
-                res.status(404).json('User not found!');
+                next(new ErrorHendler('User not Found', 404));
                 return;
             }
             req.user = userFromEmail;
             next();
         } catch (e:any) {
-            res.json({ status: 400, message: e.message });
+            next(e);
         }
     }
 
@@ -26,12 +27,12 @@ class UserMiddlewares {
             const userFromEmail = await userService.getUserByEmail(email);
 
             if (userFromEmail) {
-                res.status(404).json('This email is already exists!');
+                next(new ErrorHendler('User not Found', 404));
                 return;
             }
             next();
         } catch (e:any) {
-            res.json({ status: 400, message: e.message });
+            next(e);
         }
     }
 
@@ -41,12 +42,12 @@ class UserMiddlewares {
             const { error, value } = userValidators.crateUser.validate(req.body);
 
             if (error) {
-                throw new Error(error.details[0].message);
+                next(new ErrorHendler(error.details[0].message, 404));
             }
             req.body = value;
             next();
         } catch (e:any) {
-            res.status(400).json(e.message);
+            next(e);
         }
     }
 
@@ -56,12 +57,13 @@ class UserMiddlewares {
             const { error, value } = userValidators.loginUser.validate(req.body);
 
             if (error) {
-                throw new Error('Wrong email or password!');
+                next(new ErrorHendler('Wrong email or password!', 404));
+                return;
             }
             req.body = value;
             next();
         } catch (e:any) {
-            res.status(400).json(e.message);
+            next(e);
         }
     }
 
@@ -71,12 +73,13 @@ class UserMiddlewares {
             const { error, value } = paramValidator.id.validate(req.params);
 
             if (error) {
-                throw new Error('Wrong id user!');
+                next(new ErrorHendler('Wrong id user!', 404));
+                return;
             }
             req.body = value;
             next();
         } catch (e:any) {
-            res.status(400).json(e.message);
+            next(e);
         }
     }
 }

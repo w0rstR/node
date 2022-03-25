@@ -33,7 +33,7 @@ exports.userValidators = {
     }),
     loginUser: Joi.object({
         email: Joi.string().regex(regexp_1.regexp.EMAIL).required(),
-        password: Joi.string().regex(regexp_1.regexp.PASSWORD).required(),
+        password: Joi.string().required(),
     }),
 };
 //# sourceMappingURL=userValidators.js.map

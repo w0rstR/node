@@ -10,3 +10,9 @@ routes.use('/users', usersRouter);
 routes.use('/posts', postRouter);
 routes.use('/comments', commentRouter);
 routes.use('/auth', authRouter);
+
+// @ts-ignore
+routes.use('*', (err, req, res, next) => {
+    res.status(err.code || 500)
+        .json({ message: err.message });
+});
