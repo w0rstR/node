@@ -1,8 +1,8 @@
-import { Request, Response } from 'express';
-import { IRequestExtended } from '../interfaces/requestExtendedInterface';
+import { NextFunction, Request, Response } from 'express';
+import { IRequestExtended, ITokenPayload } from '../interfaces';
 import { tokenService, authService, userService } from '../services';
 import { IUser } from '../entity/user';
-import { ITokenPayload } from '../interfaces/tokenInterfaces';
+import { ErrorHendler } from '../error/errorHendler';
 
 class AuthController {
     public async registration(req:Request, res:Response):Promise<Response<ITokenPayload>> {
@@ -24,14 +24,14 @@ class AuthController {
         return res.json('Logout is successfully completed');
     }
 
-    public async login(req:IRequestExtended, res:Response) {
+    public async login(req:IRequestExtended, res:Response, next:NextFunction) {
         const { email, id, password: hashPassword } = req.user as IUser;
         const { password } = req.body;
 
         const isCorectPassword = await userService.compareUserPassword(password, hashPassword);
 
         if (!isCorectPassword) {
-            res.status(404).json('User not found!');
+            next(new ErrorHendler('User not found', 404));
             return;
         }
 

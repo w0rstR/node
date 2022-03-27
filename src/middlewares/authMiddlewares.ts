@@ -1,28 +1,30 @@
 import { NextFunction, Response } from 'express';
 import { userService, tokenService } from '../services';
 import { IRequestExtended } from '../interfaces';
+import { ErrorHendler } from '../error/errorHendler';
 
 class AuthMiddlewares {
     public async checkAccessToken(req:IRequestExtended, res:Response, next:NextFunction) {
         try {
             const accessToken = req.header('authorization')?.split(' ')[1];
-            console.log(accessToken);
 
             if (!accessToken) {
-                throw new Error('You not have token');
+                next(new ErrorHendler('You not have token', 401));
+                return;
             }
 
             const { userEmail } = tokenService.verifyToken(accessToken);
             const userFromToken = await userService.getUserByEmail(userEmail);
 
             if (!userFromToken) {
-                throw new Error('Wrong token');
+                next(new ErrorHendler('User not found!', 404));
+                return;
             }
 
             req.user = userFromToken;
             next();
         } catch (e: any) {
-            res.json({ status: 400, message: e.message });
+            next(e);
         }
     }
 
@@ -34,13 +36,14 @@ class AuthMiddlewares {
             const tokenFromDb = await tokenService.findRefreshToken(refreshToken);
 
             if (!payloadFromToken || !userFromPayload || !tokenFromDb) {
-                throw new Error('Wrong token');
+                next(new ErrorHendler('Wrong token', 401));
+                return;
             }
 
             req.user = userFromPayload;
             next();
         } catch (e: any) {
-            res.json({ status: 400, message: e.message });
+            next(e);
         }
     }
 }

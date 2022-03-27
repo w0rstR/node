@@ -43,6 +43,7 @@ class UserMiddlewares {
 
             if (error) {
                 next(new ErrorHendler(error.details[0].message, 404));
+                return;
             }
             req.body = value;
             next();
@@ -74,6 +75,22 @@ class UserMiddlewares {
 
             if (error) {
                 next(new ErrorHendler('Wrong id user!', 404));
+                return;
+            }
+            req.body = value;
+            next();
+        } catch (e:any) {
+            next(e);
+        }
+    }
+
+    public async validateUpdateUser(req:IRequestExtended, res:Response, next:NextFunction)
+        :Promise<void> {
+        try {
+            const { error, value } = userValidators.updateUser.validate(req.body);
+
+            if (error) {
+                next(new ErrorHendler(error.details[0].message, 404));
                 return;
             }
             req.body = value;

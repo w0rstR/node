@@ -39,6 +39,7 @@ class UserMiddlewares {
             const { error, value } = validators_1.userValidators.crateUser.validate(req.body);
             if (error) {
                 next(new errorHendler_1.ErrorHendler(error.details[0].message, 404));
+                return;
             }
             req.body = value;
             next();
@@ -66,6 +67,20 @@ class UserMiddlewares {
             const { error, value } = validators_1.paramValidator.id.validate(req.params);
             if (error) {
                 next(new errorHendler_1.ErrorHendler('Wrong id user!', 404));
+                return;
+            }
+            req.body = value;
+            next();
+        }
+        catch (e) {
+            next(e);
+        }
+    }
+    async validateUpdateUser(req, res, next) {
+        try {
+            const { error, value } = validators_1.userValidators.updateUser.validate(req.body);
+            if (error) {
+                next(new errorHendler_1.ErrorHendler(error.details[0].message, 404));
                 return;
             }
             req.body = value;

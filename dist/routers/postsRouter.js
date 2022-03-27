@@ -2,11 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postRouter = void 0;
 const express_1 = require("express");
-const postController_1 = require("../controller/postController");
+const controller_1 = require("../controller");
+const middlewares_1 = require("../middlewares");
 exports.postRouter = (0, express_1.Router)();
-exports.postRouter.get('/', postController_1.postController.getPosts);
-exports.postRouter.get('/:userId', postController_1.postController.getPostByUserId);
-exports.postRouter.post('/', postController_1.postController.createPost);
-exports.postRouter.put('/:id', postController_1.postController.updatePostById);
-exports.postRouter.delete('/:id', postController_1.postController.deletePostById);
+exports.postRouter.get('/', controller_1.postController.getPosts);
+exports.postRouter.get('/:userId', middlewares_1.postMiddlewares.validateId, controller_1.postController.getPostByUserId);
+exports.postRouter.post('/', middlewares_1.postMiddlewares.validatePost, controller_1.postController.createPost);
+exports.postRouter.put('/:id', middlewares_1.postMiddlewares.validateId, middlewares_1.postMiddlewares.validateUpdatePost, controller_1.postController.updatePostById);
+exports.postRouter.delete('/:id', middlewares_1.postMiddlewares.validateId, controller_1.postController.deletePostById);
 //# sourceMappingURL=postsRouter.js.map

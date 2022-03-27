@@ -2,24 +2,26 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authMiddlewares = void 0;
 const services_1 = require("../services");
+const errorHendler_1 = require("../error/errorHendler");
 class AuthMiddlewares {
     async checkAccessToken(req, res, next) {
         try {
             const accessToken = req.header('authorization')?.split(' ')[1];
-            console.log(accessToken);
             if (!accessToken) {
-                throw new Error('You not have token');
+                next(new errorHendler_1.ErrorHendler('You not have token', 401));
+                return;
             }
             const { userEmail } = services_1.tokenService.verifyToken(accessToken);
             const userFromToken = await services_1.userService.getUserByEmail(userEmail);
             if (!userFromToken) {
-                throw new Error('Wrong token');
+                next(new errorHendler_1.ErrorHendler('User not found!', 404));
+                return;
             }
             req.user = userFromToken;
             next();
         }
         catch (e) {
-            res.json({ status: 400, message: e.message });
+            next(e);
         }
     }
     async checkRefreshToken(req, res, next) {
@@ -29,13 +31,14 @@ class AuthMiddlewares {
             const userFromPayload = await services_1.userService.getUserByEmail(payloadFromToken.userEmail);
             const tokenFromDb = await services_1.tokenService.findRefreshToken(refreshToken);
             if (!payloadFromToken || !userFromPayload || !tokenFromDb) {
-                throw new Error('Wrong token');
+                next(new errorHendler_1.ErrorHendler('Wrong token', 401));
+                return;
             }
             req.user = userFromPayload;
             next();
         }
         catch (e) {
-            res.json({ status: 400, message: e.message });
+            next(e);
         }
     }
 }

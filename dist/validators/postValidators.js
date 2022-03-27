@@ -19,25 +19,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userValidators = void 0;
+exports.postValidators = void 0;
 const Joi = __importStar(require("joi"));
-const regexp_1 = require("../\u0441onstans/regexp");
-exports.userValidators = {
-    crateUser: Joi.object({
-        firstName: Joi.string().min(2).max(20).required(),
-        lastName: Joi.string().min(2).max(20).required(),
-        age: Joi.number().min(18).max(100).required(),
-        phone: Joi.string().regex(regexp_1.regexp.PHONE).required(),
-        email: Joi.string().regex(regexp_1.regexp.EMAIL).required(),
-        password: Joi.string().regex(regexp_1.regexp.PASSWORD).required(),
+exports.postValidators = {
+    post: Joi.object({
+        id: Joi.number(),
+        text: Joi.string().required(),
+        title: Joi.string().required(),
+        userId: Joi.number().required(),
     }),
-    loginUser: Joi.object({
-        email: Joi.string().regex(regexp_1.regexp.EMAIL).required(),
-        password: Joi.string().required(),
-    }),
-    updateUser: Joi.object({
-        email: Joi.string().regex(regexp_1.regexp.EMAIL).required(),
-        password: Joi.string().required(),
+    updatePost: Joi.object({
+        id: Joi.number(),
+        text: Joi.string().required(),
+        title: Joi.string().required(),
     }),
 };
-//# sourceMappingURL=userValidators.js.map
+//# sourceMappingURL=postValidators.js.map

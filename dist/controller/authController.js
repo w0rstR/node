@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authController = void 0;
 const services_1 = require("../services");
+const errorHendler_1 = require("../error/errorHendler");
 class AuthController {
     async registration(req, res) {
         const data = await services_1.authService.registaration(req.body);
@@ -14,12 +15,12 @@ class AuthController {
         await services_1.tokenService.deleteUserToken(id);
         return res.json('Logout is successfully completed');
     }
-    async login(req, res) {
+    async login(req, res, next) {
         const { email, id, password: hashPassword } = req.user;
         const { password } = req.body;
         const isCorectPassword = await services_1.userService.compareUserPassword(password, hashPassword);
         if (!isCorectPassword) {
-            res.status(404).json('User not found!');
+            next(new errorHendler_1.ErrorHendler('User not found', 404));
             return;
         }
         const { accessToken, refreshToken } = await services_1.tokenService
