@@ -13,6 +13,6 @@ routes.use('/auth', authRouter);
 
 // @ts-ignore
 routes.use('*', (err, req, res, next) => {
-    res.status(err.code || 500)
+    res.status(err.status || 500)
         .json({ message: err.message });
 });

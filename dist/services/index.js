@@ -15,4 +15,5 @@ __exportStar(require("./commentService"), exports);
 __exportStar(require("./tokenServices"), exports);
 __exportStar(require("./postService"), exports);
 __exportStar(require("./userServices"), exports);
+__exportStar(require("./emailService"), exports);
 //# sourceMappingURL=index.js.map
