@@ -5,6 +5,10 @@ import cookieParser from 'cookie-parser';
 import { routes } from './routers/apiRouters';
 
 const app = express();
+
+// @ts-ignore
+global.rootDir = __dirname;
+
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cookieParser());

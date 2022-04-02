@@ -1,11 +1,24 @@
 import * as nodemailer from 'nodemailer';
+import path from 'path';
+import EmailTemplate from 'email-templates';
+import { SentMessageInfo } from 'nodemailer';
 import { config } from '../config/config';
 import { emailActionEnum } from '../сonstans/enums';
 import { emailInfo } from '../сonstans/email.info';
 
 class EmailService {
-    sendMail(userMail:string, action: emailActionEnum) {
-        const { subject, html } = emailInfo[action];
+    async sendMail(userMail:string, action: emailActionEnum, context = {}):Promise<SentMessageInfo> {
+        const templateRenderer = new EmailTemplate({
+            views: {
+                // @ts-ignore
+                root: path.join(global.rootDir, 'email-templates'),
+            },
+        });
+        const { subject, templateName } = emailInfo[action];
+
+        Object.assign(context, { frontendUrl: 'google.com' });
+
+        const html = await templateRenderer.render(templateName, { userName: 'Nastya' });
 
         const emailTransporter = nodemailer.createTransport({
             from: 'Test',

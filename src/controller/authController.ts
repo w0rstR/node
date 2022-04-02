@@ -32,7 +32,7 @@ class AuthController {
             const { email, id, password: hashPassword } = req.user as IUser;
             const { password } = req.body;
 
-            await emailService.sendMail(email, emailActionEnum.ACCOUNT_BLOCKED);
+            await emailService.sendMail(email, emailActionEnum.WELCOME, { userName: 'Nastya' });
 
             const isCorectPassword = await userService.compareUserPassword(password, hashPassword);
 
