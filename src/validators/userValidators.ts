@@ -15,8 +15,11 @@ export const userValidators = {
         password: Joi.string().required(),
     }),
     updateUser: Joi.object({
-        email: Joi.string().regex(regexp.EMAIL).required(),
         password: Joi.string().required(),
+    }),
+
+    email: Joi.object({
+        email: Joi.string().required(),
     }),
 
 };

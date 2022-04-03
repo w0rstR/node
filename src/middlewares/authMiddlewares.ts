@@ -2,6 +2,7 @@ import { NextFunction, Response } from 'express';
 import { userService, tokenService } from '../services';
 import { IRequestExtended } from '../interfaces';
 import { ErrorHendler } from '../error/errorHendler';
+import { userValidators } from '../validators';
 
 class AuthMiddlewares {
     public async checkAccessToken(req:IRequestExtended, res:Response, next:NextFunction) {
@@ -41,6 +42,22 @@ class AuthMiddlewares {
             }
 
             req.user = userFromPayload;
+            next();
+        } catch (e: any) {
+            next(e);
+        }
+    }
+
+    public async checkValidEmail(req:IRequestExtended, res:Response, next:NextFunction) {
+        try {
+            const { error, value } = userValidators.email.validate(req.body);
+
+            if (error) {
+                next(new ErrorHendler(error.details[0].message, 401));
+                return;
+            }
+
+            req.body = value;
             next();
         } catch (e: any) {
             next(e);

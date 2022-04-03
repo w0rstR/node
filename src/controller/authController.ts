@@ -6,6 +6,9 @@ import {
 import { IUser } from '../entity/user';
 import { ErrorHendler } from '../error/errorHendler';
 import { emailActionEnum } from '../сonstans/enums';
+import { actionTokenRepository } from '../repositories/actionTokenRepository/actionTokenRepository';
+import { ActionTokensTypes } from '../enums/actionTokensTypes.enum';
+import { constans } from '../сonstans/constans';
 
 class AuthController {
     public async registration(req:Request, res:Response):Promise<Response<ITokenPayload>> {
@@ -76,6 +79,24 @@ class AuthController {
             refreshToken,
             accessToken,
         });
+    }
+
+    public async sendForgotPassword(req:IRequestExtended, res:Response, next:NextFunction) {
+        try {
+            const { email, id, firstName } = req.user as IUser;
+
+            const token = await tokenService.generateActionToken({ userId: id, userEmail: email });
+            console.log(token);
+
+            await actionTokenRepository.createActionToken(
+                { actionToken: token, type: ActionTokensTypes.forgotPassword, userId: id },
+            );
+            await emailService.sendMail(email, emailActionEnum.FORGOT_PASSWORD, { userName: firstName, frontUrl: `${constans.FRONTEND_URL}?token=${token}` });
+
+            res.sendStatus(201);
+        } catch (e) {
+            next(e);
+        }
     }
 }
 

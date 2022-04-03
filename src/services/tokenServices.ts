@@ -48,6 +48,10 @@ class TokenServices {
         }
         return jwt.verify(token, secretWord as string) as IUserPayload;
     }
+
+    public generateActionToken(payload:any): string {
+        return jwt.sign(payload, config.SECRET_ACCESS_KEY as string, { expiresIn: '150m' });
+    }
 }
 
 export const tokenService = new TokenServices();

@@ -17,3 +17,5 @@ router.post('/registration', userMiddlewares.validateCreateUser, userMiddlewares
 router.post('/login', userMiddlewares.validateLoginUser, userMiddlewares.checkEmailExist, authController.login);
 router.get('/logout', authMiddlewares.checkAccessToken, authController.logout);
 router.get('/refresh', authMiddlewares.checkRefreshToken, authController.refresh);
+
+router.post('/forgotPassword', authMiddlewares.checkValidEmail, userMiddlewares.checkEmailExist, authController.sendForgotPassword);
