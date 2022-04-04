@@ -19,3 +19,4 @@ router.get('/logout', authMiddlewares.checkAccessToken, authController.logout);
 router.get('/refresh', authMiddlewares.checkRefreshToken, authController.refresh);
 
 router.post('/forgotPassword', authMiddlewares.checkValidEmail, userMiddlewares.checkEmailExist, authController.sendForgotPassword);
+router.post('/forgotPassword/set', authMiddlewares.checkValidPassword, authMiddlewares.checkActionToken, authController.setPassword);

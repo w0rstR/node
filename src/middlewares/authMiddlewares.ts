@@ -3,6 +3,8 @@ import { userService, tokenService } from '../services';
 import { IRequestExtended } from '../interfaces';
 import { ErrorHendler } from '../error/errorHendler';
 import { userValidators } from '../validators';
+import { constans } from '../сonstans/constans';
+import { actionTokenRepository } from '../repositories/actionTokenRepository/actionTokenRepository';
 
 class AuthMiddlewares {
     public async checkAccessToken(req:IRequestExtended, res:Response, next:NextFunction) {
@@ -63,6 +65,54 @@ class AuthMiddlewares {
             next(e);
         }
     }
-}
 
+    public async checkValidPassword(req:IRequestExtended, res:Response, next:NextFunction) {
+        try {
+            const { error, value } = userValidators.password.validate(req.body);
+
+            if (error) {
+                next(new ErrorHendler(error.details[0].message));
+                return;
+            }
+
+            req.body = value;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async checkActionToken(req:IRequestExtended, res:Response, next:NextFunction) {
+        try {
+            const actionToken = req.get(constans.AUTHORIZATION);
+
+            if (!actionToken) {
+                next(new ErrorHendler('No token'));
+                return;
+            }
+
+            const { userEmail } = await tokenService.verifyToken(actionToken, 'action');
+
+            const tokenFromDB = await actionTokenRepository.findByParams({ actionToken });
+
+            if (!tokenFromDB) {
+                next(new ErrorHendler('Token not valid', 401));
+                return;
+            }
+
+            const userFromToken = await userService.getUserByEmail(userEmail);
+
+            if (!userFromToken) {
+                next(new ErrorHendler('Token not valid', 401));
+                return;
+            }
+
+            req.user = userFromToken;
+
+            next();
+        } catch (e: any) {
+            next(e);
+        }
+    }
+}
 export const authMiddlewares = new AuthMiddlewares();

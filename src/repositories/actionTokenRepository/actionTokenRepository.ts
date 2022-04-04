@@ -9,6 +9,14 @@ class ActionTokenRepository extends Repository<ActionToken> implements IActionTo
             .getRepository(ActionToken)
             .save(token);
     }
+
+    async findByParams(filterObject: Partial<IActionToken>): Promise<IActionToken | undefined> {
+        return getManager().getRepository(ActionToken).findOne(filterObject);
+    }
+
+    async deleteByParams(findObject: Partial<IActionToken>) {
+        return getManager().getRepository(ActionToken).delete(findObject);
+    }
 }
 
 export const actionTokenRepository = new ActionTokenRepository();

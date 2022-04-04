@@ -37,6 +37,15 @@ class UserServices {
     private async _hashPassword(password:string): Promise<string> {
         return bcrypt.hash(password, 10);
     }
+
+    public async updateUser(id: number, obj: Partial<IUser>): Promise<object | undefined> {
+        if (obj.password) {
+            // eslint-disable-next-line no-param-reassign
+            obj.password = await this._hashPassword(obj.password);
+        }
+
+        return userRepository.updateUser(id, obj);
+    }
 }
 
 export const userService = new UserServices();

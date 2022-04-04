@@ -22,4 +22,9 @@ export const userValidators = {
         email: Joi.string().required(),
     }),
 
+    password: Joi.object({
+        password: Joi.string().required().min(8).message('Password not valid')
+            .trim(),
+    }),
+
 };
