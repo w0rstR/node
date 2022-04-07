@@ -40,8 +40,12 @@ class UserRepository extends Repository<User> implements IUserRepository {
             });
     }
 
-    public async updateUser(id: number, user: Partial<IUser>): Promise<object> {
-        return getManager().getRepository(User).update({ id }, user);
+    public async updateUserPassword(id: number, password:string): Promise<object> {
+        return getManager()
+            .getRepository(User)
+            .update({ id }, {
+                password,
+            });
     }
 }
 

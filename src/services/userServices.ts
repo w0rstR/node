@@ -34,17 +34,13 @@ class UserServices {
         return isPasswordCorect;
     }
 
-    private async _hashPassword(password:string): Promise<string> {
+    private async _hashPassword(password: string): Promise<string> {
         return bcrypt.hash(password, 10);
     }
 
-    public async updateUser(id: number, obj: Partial<IUser>): Promise<object | undefined> {
-        if (obj.password) {
-            // eslint-disable-next-line no-param-reassign
-            obj.password = await this._hashPassword(obj.password);
-        }
-
-        return userRepository.updateUser(id, obj);
+    public async updateUserPassword(id: number, user: Partial<IUser>): Promise<object | undefined> {
+        const password = await this._hashPassword(user.password as string);
+        return userRepository.updateUserPassword(id, password);
     }
 }
 

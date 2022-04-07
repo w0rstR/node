@@ -23,8 +23,7 @@ export const userValidators = {
     }),
 
     password: Joi.object({
-        password: Joi.string().required().min(8).message('Password not valid')
-            .trim(),
+        password: Joi.string().required().min(8),
     }),
 
 };

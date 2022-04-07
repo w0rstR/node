@@ -14,7 +14,7 @@ class ActionTokenRepository extends Repository<ActionToken> implements IActionTo
         return getManager().getRepository(ActionToken).findOne(filterObject);
     }
 
-    async deleteByParams(findObject: Partial<IActionToken>) {
+    async deleteByParams(findObject: Partial<IActionToken>): Promise<object> {
         return getManager().getRepository(ActionToken).delete(findObject);
     }
 }

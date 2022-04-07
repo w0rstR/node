@@ -55,7 +55,7 @@ class TokenServices {
     }
 
     public generateActionToken(payload:any): string {
-        return jwt.sign(payload, config.SECRET_ACCESS_KEY as string, { expiresIn: '150m' });
+        return jwt.sign(payload, config.SECRET_ACTION_KEY as string, { expiresIn: '150m' });
     }
 }
 

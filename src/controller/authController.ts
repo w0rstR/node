@@ -9,7 +9,6 @@ import { emailActionEnum } from '../сonstans/enums';
 import { actionTokenRepository } from '../repositories/actionTokenRepository/actionTokenRepository';
 import { ActionTokensTypes } from '../enums/actionTokensTypes.enum';
 import { constans } from '../сonstans/constans';
-import { userRepository } from '../repositories/user/userRepository';
 
 class AuthController {
     public async registration(req:Request, res:Response):Promise<Response<ITokenPayload>> {
@@ -86,9 +85,8 @@ class AuthController {
         try {
             const { email, id, firstName } = req.user as IUser;
 
-            const token = await tokenService.generateActionToken({ userId: id, userEmail: email });
+            const token = tokenService.generateActionToken({ userId: id, userEmail: email });
 
-            console.log(token);
             await actionTokenRepository.createActionToken(
                 { actionToken: token, type: ActionTokensTypes.forgotPassword, userId: id },
             );
@@ -105,16 +103,8 @@ class AuthController {
             const { id } = req.user as IUser;
             const actionToken = req.get(constans.AUTHORIZATION);
 
-            await userRepository.updateUser(id, req.body);
+            await userService.updateUserPassword(id, req.body);
             await actionTokenRepository.deleteByParams({ actionToken });
-
-            // const token = await tokenService.generateActionToken({ userId: id, userEmail: email });
-            // console.log(token);
-            //
-            // await actionTokenRepository.createActionToken(
-            //     { actionToken: token, type: ActionTokensTypes.forgotPassword, userId: id },
-            // );
-            // await emailService.sendMail(email, emailActionEnum.FORGOT_PASSWORD, { token, userName: firstName });
 
             res.sendStatus(201);
         } catch (e) {
