@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { IRequestExtended, ITokenPayload } from '../interfaces';
+import { UploadedFile } from 'express-fileupload';
+import { IRequestExtended } from '../interfaces';
 import {
     authService, emailService, tokenService, userService,
 } from '../services';
@@ -9,18 +10,35 @@ import { emailActionEnum } from '../сonstans/enums';
 import { actionTokenRepository } from '../repositories/actionTokenRepository/actionTokenRepository';
 import { ActionTokensTypes } from '../enums/actionTokensTypes.enum';
 import { constans } from '../сonstans/constans';
+import { s3Service } from '../services/s3.service';
 
 class AuthController {
-    public async registration(req:Request, res:Response):Promise<Response<ITokenPayload>> {
-        const data = await authService.registaration(req.body);
+    public async registration(req:Request, res:Response, next:NextFunction):Promise<void> {
+        try {
+            const avatar = req.files?.avatar as UploadedFile;
 
-        res.cookie(
-            'refreshToken',
-            data.refreshToken,
-            { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true },
-        );
+            const createdUser = await userService.createUser(req.body);
 
-        return res.json(data);
+            // upload file
+            if (avatar) {
+                const sendData = await s3Service.uploadFile(avatar, 'user', createdUser.id);
+                console.log('___________________________________________________');
+                console.log(sendData.Location);
+                console.log('___________________________________________________');
+            }
+
+            const tokenData = await authService.registaration(createdUser);
+
+            res.cookie(
+                'refreshToken',
+                tokenData.refreshToken,
+                { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true },
+            );
+
+            res.json(tokenData);
+        } catch (e) {
+            next(e);
+        }
     }
 
     public async logout(req:IRequestExtended, res:Response):Promise<Response<String>> {

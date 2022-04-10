@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authController } from '../controller';
-import { userMiddlewares, authMiddlewares } from '../middlewares';
+import { userMiddlewares, authMiddlewares, fileMiddleware } from '../middlewares';
 
 const router = Router();
 
@@ -13,7 +13,7 @@ const router = Router();
 
 export const authRouter = router;
 
-router.post('/registration', userMiddlewares.validateCreateUser, userMiddlewares.checkEmailNotExist, authController.registration);
+router.post('/registration', fileMiddleware.checkUserAvatar, userMiddlewares.validateCreateUser, userMiddlewares.checkEmailNotExist, authController.registration);
 router.post('/login', userMiddlewares.validateLoginUser, userMiddlewares.checkEmailExist, authController.login);
 router.get('/logout', authMiddlewares.checkAccessToken, authController.logout);
 router.get('/refresh', authMiddlewares.checkRefreshToken, authController.refresh);

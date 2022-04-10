@@ -42,6 +42,10 @@ class UserServices {
         const password = await this._hashPassword(user.password as string);
         return userRepository.updateUserPassword(id, password);
     }
+
+    public async getUserPagination(filterObject: any, page: number, perPage: number) {
+        return userRepository.getUserPagination(perPage, page, filterObject);
+    }
 }
 
 export const userService = new UserServices();
