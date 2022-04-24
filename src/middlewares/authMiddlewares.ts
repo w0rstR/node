@@ -9,7 +9,7 @@ import { actionTokenRepository } from '../repositories/actionTokenRepository/act
 class AuthMiddlewares {
     public async checkAccessToken(req:IRequestExtended, res:Response, next:NextFunction) {
         try {
-            const accessToken = req.header('authorization')?.split(' ')[1];
+            const accessToken = req.header('authorization');
 
             if (!accessToken) {
                 next(new ErrorHendler('You not have token', 401));

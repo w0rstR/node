@@ -53,7 +53,7 @@ class AuthController {
             const { email, id, password: hashPassword } = req.user as IUser;
             const { password } = req.body;
 
-            await emailService.sendMail(email, emailActionEnum.WELCOME, { userName: 'Nastya' });
+            // await emailService.sendMail(email, emailActionEnum.WELCOME, { userName: 'Nastya' });
 
             const isCorectPassword = await userService.compareUserPassword(password, hashPassword);
 
@@ -75,6 +75,7 @@ class AuthController {
             res.json({
                 accessToken,
                 user: req.user,
+                message: 'Successful login',
             });
         } catch (e) {
             next(e);
